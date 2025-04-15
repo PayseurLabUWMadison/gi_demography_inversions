@@ -7,7 +7,7 @@ This Markdown file describes the steps taken to process and align the raw reads 
 Most of the samples are represented by 17 distinct lanes (2 full flowcells plus a single lane), but some are represented by 18 distinct lanes. For the purposes of data processing, I recoded the lanes (denoted by the string L00{X} in each FASTQ file name) to run from 1-17 (or 18) such that all FASTQ files posess unique names.
 
 ## Software information
-All of the software used for this component are described in the packages [TO LINK] directory.
+All of the software used for this component are described in the [packages](https://github.com/PayseurLabUWMadison/gi_demography_inversions/tree/main/packages) directory.
 
 ## Pipeline
 This section details the exact commands and parameters used for read quality control and alignment. The following wildcards were used in constructing file names for the example commands:
@@ -18,7 +18,7 @@ This section details the exact commands and parameters used for read quality con
 - Chromosome: `{chrom}`
 
 #### Read quality control
-First, we trimmed adapter sequences in all raw FASTQ files with BBduk. This was done using the paired-end setting of BBduk which takes in the forward and reverse read files and creates a trimmed output file for each. The `adapters.fa` [LINK] file contains possible adapter sequences.
+First, we trimmed adapter sequences in all raw FASTQ files with BBduk. This was done using the paired-end setting of BBduk which takes in the forward and reverse read files and creates a trimmed output file for each. The [`adapters.fa`](https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/sequence_processing/adapters.fa) file contains possible adapter sequences.
 ```
 bbduk.sh -Xmx1g in1={sample}_S{X}_L00{X}_R1_00{X}.fastq.gz in2={sample}_S{X}_L00{X}_R2_00{X}.fastq.gz out1={sample}_L00{X}_adaptrim_1P.fastq.gz out2={sample}_L00{X}_adaptrim_2P.fastq.gz  ref=adapters.fa ktrim=r k=23 mink=11 hdist=1 tpe tbo
 ```
@@ -33,7 +33,7 @@ We used the BWA-MEM algorithm to map the processed, paired-end reads to the *P. 
 ```
 bash read_group.sh GCF_003704035.1_HU_Pman_2.1.3_genomic.fna.gz {sample}_L00{X}_adaptrim_qualtrim_1P.fastq.gz {sample}_L00{X}_adaptrim_qualtrim_1P.fastq.gz {sample} {sample}_L00{X}_sorted.bam
 ```
->Note: The `read_group.sh` [TO LINK] script is required to properly format the RG tags in the output BAM file. The BWA-MEM algorithm is run from inside this bash script. The BWA command within this script has the following format: `bwa mem -t 8 -R $(echo "@RG\tID:${ID}\tPL:${PL}\tPU:${PU}\tLB:${LB}\tSM:${SM}") $REF $R1 $R2 | samtools sort -o $OUT`.
+>Note: The [`read_group.sh`](https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/sequence_processing/read_group.sh) script is required to properly format the RG tags in the output BAM file. The BWA-MEM algorithm is run from inside this bash script. The BWA command within this script has the following format: `bwa mem -t 8 -R $(echo "@RG\tID:${ID}\tPL:${PL}\tPU:${PU}\tLB:${LB}\tSM:${SM}") $REF $R1 $R2 | samtools sort -o $OUT`.
 
 Then, for each sample, we merged together the lane-separated alignments such that each sample is subsequently represented by a single BAM file. 
 ```
