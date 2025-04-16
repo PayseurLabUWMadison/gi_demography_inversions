@@ -12,10 +12,8 @@ All of the software used for this component are described in the [packages](http
 ## Pipeline
 This section details the exact commands and parameters used for read quality control and alignment. The following wildcards were used in constructing file names for the example commands:
 - Sample name: `{sample}`
-- Population name: `{pop}`
 - Miscellaneous numbers: `{X}`
 - Directory: `{dir}`
-- Chromosome: `{chrom}`
 
 #### Read quality control
 First, we trimmed adapter sequences in all raw FASTQ files with BBduk. This was done using the paired-end setting of BBduk which takes in the forward and reverse read files and creates a trimmed output file for each. The [`adapters.fa`](https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/sequence_processing/adapters.fa) file contains possible adapter sequences.
