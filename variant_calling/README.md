@@ -7,7 +7,7 @@ Sampled mice span two islands (Saturna Island and Pender Island) and one mainlan
 ## Software information
 All of the software used for this component are described in the [packages](https://github.com/PayseurLabUWMadison/gi_demography_inversions/tree/main/packages) directory.
 
-## Pipeline
+## Code
 This section details the exact commands and parameters used for variant calling and basic site-level filtering. The following wildcards were used in constructing file names for the example commands:
 - Sample name: `{sample}`
 - Population name: `{pop}`
