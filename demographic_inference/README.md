@@ -16,13 +16,13 @@ All of the software used for this component are described in the [packages](http
 ## Code
 This section details the commands and parameters used for demographic inference.
 
-Before fitting demographic models, we constructed Moments frequency spectrum objects for both 2D (across all population pairs) and 2D jSFS. The script `create_fs.py` (LINK) can read in a multi-population VCF file and create either the marginal, joint (2D), or joint (3D) frequency spectrum for the samples/populations included in the specified population manifest. The script outputs the frequency spectrum object as a `.fs` file.
+Before fitting demographic models, we constructed Moments frequency spectrum objects for both 2D (across all population pairs) and 2D jSFS. The script [`create_fs.py`](https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/demographic_inference/create_fs.py) can read in a multi-population VCF file and create either the marginal, joint (2D), or joint (3D) frequency spectrum for the samples/populations included in the specified population manifest. The script outputs the frequency spectrum object as a `.fs` file.
 ```
 python create_fs.py --vcf gulf_islands_inference_ready.vcf.gz --prefix {prefix} --popfile {popfile} --dimension {1, 2, or 3}
 ```
 Where the `--popfile` is the corresponding sample manifest in the format `[individual] [pop]`.
 
-Tested 2D and 3D demographic models are specified in the `fit_models.py` script (LINK). This python script `fit_models.py` takes in the `.fs` objects generated above, the name of the demographic model we wish to fit, the mutation rate and effective sequence length to use for parameter conversion, and a collection of optimization parameters. Using these optimization parameters, it then conducts a series of searches for the MLE of each parameter defined by the demographic model.
+Tested 2D and 3D demographic models are specified in the [`fit_models.py`](https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/demographic_inference/fit_models.py) script. This python script `fit_models.py` takes in the `.fs` objects generated above, the name of the demographic model we wish to fit, the mutation rate and effective sequence length to use for parameter conversion, and a collection of optimization parameters. Using these optimization parameters, it then conducts a series of searches for the MLE of each parameter defined by the demographic model.
 ```
 python fit_models.py --prefix {prefix} --fs {frequency spectrum}.fs --model {model} --opt_num {W} --fold_num {X} --outer_rep_num {Y} --inner_rep_num {Z} --mut {mutation rate} --L {effective sequence length}
 ```
@@ -32,12 +32,12 @@ For each of the optimizations defined by the input parameters, the script output
 ```
 Where [Popt] represents the un-converted parameter estimates to be more easily read in by downstream model evaluation scripts.
 
-To assess model fit, we inspected residual plots, which compared differences between the jSFS expected under the given model to the observed jSFS for each bin of the frequency spectrum. The python script `eval_models.py` uses the the best-fit, unscaled, parameter estimates obtained with the `fit_models.py` script and performs this comparison, outputting a `.png` summarizing the results.
+To assess model fit, we inspected residual plots, which compared differences between the jSFS expected under the given model to the observed jSFS for each bin of the frequency spectrum. The python script [`eval_models.py`](https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/demographic_inference/eval_models.py) uses the the best-fit, unscaled, parameter estimates obtained with the [`fit_models.py`](https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/demographic_inference/fit_models.py) script and performs this comparison, outputting a `.png` summarizing the results.
 ```
 python eval_models.py --prefix {prefix} --fs {frequency spectrum}.fs --model {model} --popt {parameter estimates} --dimension {1, 2, or 3}
 ```
 
-To estimate parameter uncertanties for our best-fitting three-population demographic model, we used the GIM method (Coffman et al. 2016) as an alternative to conventional bootstrapping. The python script `est_uncert.py` outputs standard deviations for each parameter estimate. 
+To estimate parameter uncertanties for our best-fitting three-population demographic model, we used the GIM method (Coffman et al. 2016) as an alternative to conventional bootstrapping. The python script [`est_uncert.py`](https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/demographic_inference/est_uncert.py) outputs standard deviations for each parameter estimate. 
 ```
 python est_uncert.py --vcf gulf_islands_inference_ready.vcf.gz --popfile {popfile} --popt {parameter estimates}
 ```
