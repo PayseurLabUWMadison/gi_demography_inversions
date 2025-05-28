@@ -42,6 +42,10 @@ To estimate parameter uncertanties for our best-fitting three-population demogra
 python est_uncert.py --vcf gulf_islands_inference_ready.vcf.gz --popfile {popfile} --popt {parameter estimates}
 ```
 
+The python script [`sim_data.py`] (https://github.com/PayseurLabUWMadison/gi_demography_inversions/blob/main/demographic_inference/sim_data.py) uses msprime to simulate sequence data in VCF format under the best-fitting three-population demographic model.
+```
+python sim_data.py --model {model} --pop1_id {pop1 name} --pop1_nsamp {number of diploid individuals in pop1} --pop2_id {pop2 name} --pop2_nsamp {number of diploid individuals in pop2} --pop3_id {pop3 name} --pop3_nsamp {number of diploid individuals in pop3} --nsites {length of genomic element} --rep {index for given replicate} --recomb {per-bp, per-gen recombination rate} --mut {per-bp, per-gen recombination rate}
+```
 
 
 
